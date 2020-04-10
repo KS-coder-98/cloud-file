@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cloud.file.management.controller.MainViewController">
+   <children>
+      <SplitPane dividerPositions="0.5">
+         <items>
+            <VBox>
+               <children>
+                  <Label fx:id="labelLogin" text="Login : unknow">
+                     <padding>
+                        <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+                     </padding>
+                  </Label>
+                  <Label fx:id="labelPath" text="Path: unknow">
+                     <padding>
+                        <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+                     </padding>
+                  </Label>
+               </children>
+            </VBox>
+            <VBox alignment="TOP_RIGHT" prefWidth="100.0">
+               <children>
+                  <Label fx:id="labelVersion" contentDisplay="RIGHT" text="v.1.0">
+                     <padding>
+                        <Insets right="10.0" top="5.0" />
+                     </padding>
+                     <font>
+                        <Font size="23.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="labelStatusConnection" contentDisplay="RIGHT" text="Status connection">
+                     <padding>
+                        <Insets right="10.0" top="5.0" />
+                     </padding>
+                  </Label>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </VBox>
+         </items>
+      </SplitPane>
+      <SplitPane dividerPositions="0.5" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+         <items>
+            <TreeView fx:id="treeViewListFiles" prefHeight="200.0" prefWidth="200.0" />
+            <ListView fx:id="treeViewListUser" />
+         </items>
+      </SplitPane>
+      <Label fx:id="labelLog" text="Log: SEND" />
+      <Button fx:id="buttonSend" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Send file">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
+   </children>
+</VBox>
