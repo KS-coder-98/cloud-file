@@ -6,8 +6,9 @@ import java.io.FileNotFoundException;
 import java.nio.file.Path;
 
 public class MainConsole {
-    public static void main(String[] args) throws FileNotFoundException {
-        Path path = Path.of("D:\\Polibuda\\semestr4\\systemy wbudowane");
-        HandlerResources.listDirectory(path);
+    public static void main(String[] args) throws Exception {
+        Path path = Path.of("D:\\Polibuda\\semestr4\\metody numeryczne");
+        var p = HandlerResources.date(path);
+        System.out.println(p);
     }
 }

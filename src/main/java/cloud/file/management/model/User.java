@@ -4,7 +4,7 @@ import java.nio.file.Path;
 
 public class User {
     private String login;
-    private Path path;
+    private static Path path;
 
     public String getLogin() {
         return login;
@@ -14,7 +14,7 @@ public class User {
         this.login = login;
     }
 
-    public Path getPath() {
+    public static Path getPath() {
         return path;
     }
 

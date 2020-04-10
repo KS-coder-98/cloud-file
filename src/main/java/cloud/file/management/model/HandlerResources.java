@@ -7,10 +7,13 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.function.Predicate;
+import java.nio.file.attribute.FileTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Stream;
 
-public abstract class HandlerResources {
+public abstract class HandlerResources{
 
     public static TreeItem<String> listDirectory(Path path) throws FileNotFoundException {
         if ( !Files.exists(path) )
@@ -29,5 +32,21 @@ public abstract class HandlerResources {
             }
         }
         return root;
+    }
+
+    public static FileTime date(Path path) {
+        List<FileTime> fileTimes = new ArrayList<>();
+        try(Stream<Path> pathStream = Files.walk(path)){
+            pathStream.forEach(s-> {
+                try {
+                    fileTimes.add(Files.getLastModifiedTime(s));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return Collections.max(fileTimes);
     }
 }
