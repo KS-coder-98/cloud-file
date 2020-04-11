@@ -13,28 +13,21 @@ public class EchoClient {
     private ObjectInputStream in;
 
     public void startConnection(String ip, int port)  {
-        System.out.println("wyszło1");
-
         try {
             clientSocket = new Socket(ip, port);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("wyszło2");
-
         try {
             out = new ObjectOutputStream(clientSocket.getOutputStream());
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("wyszło3");
-
 //        try {
 //            in = new ObjectInputStream(clientSocket.getInputStream());
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
-        System.out.println("wyszło4");
     }
 
     public void sendMessage(Message msg) {
