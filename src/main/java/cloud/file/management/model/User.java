@@ -1,29 +1,34 @@
 package cloud.file.management.model;
 
+import cloud.file.management.model.communication.EchoClient;
+
 import java.nio.file.Path;
 
 public class User {
-    private String login;
+    private static String login;
     private static Path path;
+    private static EchoClient echoClient;
 
-    public String getLogin() {
+    public static String getLogin() {
         return login;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
-    }
 
     public static Path getPath() {
         return path;
     }
 
-    public void setPath(Path path) {
-        this.path = path;
+    public static EchoClient getEchoClient() {
+        return echoClient;
     }
 
-    public User(String login, Path path) {
-        this.login = login;
-        this.path = path;
+    public static void setEchoClient(EchoClient echoClient) {
+        User.echoClient = echoClient;
+    }
+
+    public User(String login, Path path, EchoClient echoClient) {
+        User.login = login;
+        User.path = path;
+        User.echoClient = echoClient;
     }
 }

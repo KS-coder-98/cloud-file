@@ -1,5 +1,7 @@
 package cloud.file.management.controller;
 
+import cloud.file.management.common.Message;
+import cloud.file.management.model.FileAPI;
 import cloud.file.management.model.HandlerResources;
 import cloud.file.management.model.User;
 import javafx.application.Platform;
@@ -17,6 +19,7 @@ public class MainViewController implements Initializable {
 
     private static Boolean controlFlag = true;
     private static FileTime lastUpdate;
+    private static TreeItem<String> choseFile;
     private Path path;
 
     public Path getPath() {
@@ -51,6 +54,12 @@ public class MainViewController implements Initializable {
     @FXML
     private Button buttonSend;
 
+    @FXML
+    private Label labelWhatFileSend;
+
+    @FXML
+    private Label labelWhereFileSend;
+
     public TreeView<String> getTreeViewListFiles() {
         return treeViewListFiles;
     }
@@ -75,13 +84,37 @@ public class MainViewController implements Initializable {
         labelStatusConnection.setText(s);
     }
 
+    public void setLabelWhatFileSend(String s) {
+        labelWhatFileSend.setText(s);
+    }
+
+    public void setLabelWhereFileSend(String s) {
+        labelWhereFileSend.setText(s);
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Thread refreshDirectory = new Thread(this::refreshTreeViewDirectory);
+        refreshDirectory.setDaemon(true);
         path = User.getPath();
         setLastTime();
         loadTreeItems();
         refreshDirectory.start();
+
+        treeViewListFiles.getSelectionModel()
+                .selectedItemProperty()
+                .addListener((observable, oldValue, newValue) ->{
+                        choseFile = newValue;
+                        setLabelWhatFileSend(newValue.getValue());
+                });
+
+        buttonSend.setOnAction(actionEvent -> {
+            Path tempPath = Path.of(choseFile.getParent().getValue()+"\\"+choseFile.getValue());
+            byte[] file = FileAPI.getStreamFile(tempPath);
+            Message msg = new Message(User.getLogin(), tempPath.toString(), file);
+            User.getEchoClient().sendMessage(msg);
+            System.out.println(tempPath);
+        });
     }
 
     // loads some strings into the tree in the application UI.
@@ -122,4 +155,6 @@ public class MainViewController implements Initializable {
         }
         return null;
     }
+
+
 }

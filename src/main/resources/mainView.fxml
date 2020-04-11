@@ -61,5 +61,39 @@
             <Font size="20.0" />
          </font>
       </Button>
+      <SplitPane dividerPositions="0.5">
+         <items>
+            <Label fx:id="labelWhatFileSend" maxWidth="1.7976931348623157E308" text="Label">
+               <graphic>
+                  <Label text="What file:">
+                     <padding>
+                        <Insets right="5.0" />
+                     </padding>
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+               </graphic>
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="labelWhereFileSend" maxWidth="1.7976931348623157E308" text="Label">
+               <graphic>
+                  <Label text="Where File be send:">
+                     <padding>
+                        <Insets right="5.0" />
+                     </padding>
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+               </graphic>
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+         </items>
+      </SplitPane>
    </children>
 </VBox>
