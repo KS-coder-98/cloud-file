@@ -3,14 +3,24 @@ package cloud.file.management.common;
 import java.io.Serializable;
 
 public class Message implements Serializable {
+    private TypeMessage typeMessage;
     private String login;
     private String path;
     private byte[] fileInByte;
 
-    public Message(String login, String path, byte[] fileInByte) {
+    public Message(TypeMessage typeMessage, String login, String path, byte[] fileInByte) {
+        this.typeMessage = typeMessage;
         this.login = login;
         this.path = path;
         this.fileInByte = fileInByte;
+    }
+
+    public TypeMessage getTypeMessage() {
+        return typeMessage;
+    }
+
+    public void setTypeMessage(TypeMessage typeMessage) {
+        this.typeMessage = typeMessage;
     }
 
     public String getLogin() {

@@ -1,6 +1,7 @@
 package cloud.file.management.controller;
 
 import cloud.file.management.common.Message;
+import cloud.file.management.common.TypeMessage;
 import cloud.file.management.model.FileAPI;
 import cloud.file.management.model.HandlerResources;
 import cloud.file.management.model.User;
@@ -111,7 +112,7 @@ public class MainViewController implements Initializable {
         buttonSend.setOnAction(actionEvent -> {
             Path tempPath = Path.of(choseFile.getParent().getValue()+"\\"+choseFile.getValue());
             byte[] file = FileAPI.getStreamFile(tempPath);
-            Message msg = new Message(User.getLogin(), tempPath.toString(), file);
+            Message msg = new Message(TypeMessage.TRANSMISSION_FILE ,User.getLogin(), tempPath.toString(), file);
             User.getEchoClient().sendMessage(msg);
             System.out.println(tempPath);
         });
