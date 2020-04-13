@@ -1,7 +1,6 @@
 package cloud.file.management.controller;
 
-import cloud.file.management.common.Message;
-import cloud.file.management.common.TypeMessage;
+import cloud.file.management.common.FileMessage;
 import cloud.file.management.model.FileAPI;
 import cloud.file.management.model.HandlerResources;
 import cloud.file.management.model.User;
@@ -14,6 +13,8 @@ import java.io.FileNotFoundException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.attribute.FileTime;
+import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class MainViewController implements Initializable {
@@ -21,7 +22,17 @@ public class MainViewController implements Initializable {
     private static Boolean controlFlag = true;
     private static FileTime lastUpdate;
     private static TreeItem<String> choseFile;
+    private  static String choseUser;
+    private static List<String> list;
     private Path path;
+
+    public static List<String> getList() {
+        return list;
+    }
+
+    public static void setList(List<String> list) {
+        MainViewController.list = list;
+    }
 
     public Path getPath() {
         return path;
@@ -102,19 +113,38 @@ public class MainViewController implements Initializable {
         loadTreeItems();
         refreshDirectory.start();
 
+        Thread refreshListUser = new Thread(this::refreshUserList);
+        refreshListUser.setDaemon(true);
+        refreshListUser.start();
+
+
+        treeViewListUser.getSelectionModel()
+                .selectedItemProperty()
+                .addListener((observable, oldValue, newValue) ->{
+                        setLabelWhereFileSend(newValue);
+                        choseUser = newValue;
+                });
+
         treeViewListFiles.getSelectionModel()
                 .selectedItemProperty()
                 .addListener((observable, oldValue, newValue) ->{
-                        choseFile = newValue;
-                        setLabelWhatFileSend(newValue.getValue());
+                    choseFile = newValue;
+                    setLabelWhatFileSend(newValue.getValue());
                 });
 
         buttonSend.setOnAction(actionEvent -> {
-            Path tempPath = Path.of(choseFile.getParent().getValue()+"\\"+choseFile.getValue());
-            byte[] file = FileAPI.getStreamFile(tempPath);
-            Message msg = new Message(TypeMessage.TRANSMISSION_FILE ,User.getLogin(), tempPath.toString(), file);
-            User.getEchoClient().sendMessage(msg);
-            System.out.println(tempPath);
+            try {
+                Objects.requireNonNull(choseFile);
+                Objects.requireNonNull(choseUser);
+                Path absolutePath = Path.of(choseFile.getParent().getValue()+"\\"+choseFile.getValue());
+                String relativePath = absolutePath.toString().substring(User.getPath().toString().length()+1);
+                byte[] file = FileAPI.getStreamFile(absolutePath);
+                FileMessage msg = new FileMessage(User.getLogin(), relativePath, choseUser, file);
+                User.getEchoClient().sendMessage(msg);
+            }catch (NullPointerException e){
+                System.err.println("nie ustawiono pola file lub user w mainControler");
+            }
+
         });
     }
 
@@ -138,6 +168,27 @@ public class MainViewController implements Initializable {
                     setLastTime();
                     loadTreeItems();
                 }
+            });
+            try {
+                Thread.sleep(60000);
+            }catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void refreshUserList(){
+        while (controlFlag){
+            Platform.runLater(()->{
+                if (!Objects.isNull(list)){
+                    System.out.println("powinno odswiezyć "+list.toString());
+                    treeViewListUser.getItems().clear();
+                    for ( String nick : list ){
+                        System.out.println("dodało"+ nick);
+                        treeViewListUser.getItems().add(nick);
+                    }
+                }else
+                    System.out.println("kista jest nulem");
             });
             try {
                 Thread.sleep(60000);

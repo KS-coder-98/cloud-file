@@ -15,10 +15,10 @@ import java.nio.file.Path;
 public class Main extends Application {
 
     public static void main(String[] args) throws IOException {
+        var user = new User("Krzysiek", Path.of("D:\\Polibuda\\semestr4\\metody numeryczne"), null);
         EchoClient client = new EchoClient();
         client.startConnection("127.0.0.1", 5555);
-        new User("Krzysiek", Path.of("D:\\Polibuda\\semestr4\\metody numeryczne"), client);
-
+        User.setEchoClient(client);
         launch(args);
     }
 
@@ -30,8 +30,8 @@ public class Main extends Application {
         MainViewController mainViewController = fxmlLoader.getController();
         mainViewController.setPath(Path.of("D:\\Polibuda\\semestr4\\metody numeryczne"));
 
-        mainViewController.setLabelLogin("Login: "+User.getLogin());
-        mainViewController.setLabelPath("Path "+ User.getPath());
+        mainViewController.setLabelLogin("Login: " + User.getLogin());
+        mainViewController.setLabelPath("Path " + User.getPath());
 
         Scene scene = new Scene(mainView);
         stage.setScene(scene);

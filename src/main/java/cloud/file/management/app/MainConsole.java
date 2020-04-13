@@ -2,7 +2,6 @@ package cloud.file.management.app;
 
 import cloud.file.management.model.HandlerResources;
 
-import java.io.FileNotFoundException;
 import java.nio.file.Path;
 
 public class MainConsole {

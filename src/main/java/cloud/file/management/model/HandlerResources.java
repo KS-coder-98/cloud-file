@@ -13,10 +13,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
-public abstract class HandlerResources{
+public abstract class HandlerResources {
 
     public static TreeItem<String> listDirectory(Path path) throws FileNotFoundException {
-        if ( !Files.exists(path) )
+        if (!Files.exists(path))
             throw new FileNotFoundException("wrong path");
         String dirPath = path.toString();
         File dir = new File(dirPath);
@@ -36,8 +36,8 @@ public abstract class HandlerResources{
 
     public static FileTime date(Path path) {
         List<FileTime> fileTimes = new ArrayList<>();
-        try(Stream<Path> pathStream = Files.walk(path)){
-            pathStream.forEach(s-> {
+        try (Stream<Path> pathStream = Files.walk(path)) {
+            pathStream.forEach(s -> {
                 try {
                     fileTimes.add(Files.getLastModifiedTime(s));
                 } catch (IOException e) {
