@@ -8,13 +8,18 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class EchoClient {
     private Socket clientSocket;
     private ObjectOutputStream out;
     private ObjectInputStream in;
+    private List<Message> msgList;
 
     public void startConnection(String ip, int port) {
+        msgList = Collections.synchronizedList(new ArrayList<>());
         try {
             clientSocket = new Socket(ip, port);
         } catch (IOException e) {
@@ -23,7 +28,8 @@ public class EchoClient {
         try {
             out = new ObjectOutputStream(clientSocket.getOutputStream());
             System.out.println(User.getLogin());
-            sendMessage(new JoinMessage(User.getLogin()));
+            msgList.add(new JoinMessage(User.getLogin()));
+            new Send(out, msgList).start();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -35,16 +41,15 @@ public class EchoClient {
         }
     }
 
-    public void sendMessage(Message msg) {
-        try {
-            out.writeObject(msg);
-            out.flush();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
+//    public void sendMessage(Message msg) {
+//        try {
+//            out.writeObject(msg);
+//            out.flush();
+//        } catch (IOException e) {
+//            System.out.println(e.getMessage());
+//            e.printStackTrace();
+//        }
+//    }
 
     public void stopConnection() {
         try {
@@ -79,5 +84,17 @@ public class EchoClient {
 
     public void setIn(ObjectInputStream in) {
         this.in = in;
+    }
+
+    public void addMessage(Message msg){
+        msgList.add(msg);
+    }
+
+    public List<Message> getMsgList() {
+        return msgList;
+    }
+
+    public void setMsgList(List<Message> msgList) {
+        this.msgList = msgList;
     }
 }

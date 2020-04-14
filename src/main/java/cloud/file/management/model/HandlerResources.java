@@ -11,6 +11,7 @@ import java.nio.file.attribute.FileTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public abstract class HandlerResources {
@@ -32,6 +33,23 @@ public abstract class HandlerResources {
             }
         }
         return root;
+    }
+
+    public static List<String> listNameFile(Path path){
+        List<String> fileList = null;
+        int index = User.getPath().toString().length();
+        try (Stream<Path> pathStream = Files.walk(path)){
+            fileList = pathStream.filter(p->Files.isRegularFile(p))
+                    .map(Path::toString)
+                    .map(s->s.substring(index))
+                    .filter(s -> s.length()>0)
+                    .map(s->s.replaceFirst("\\\\", ""))
+                    .sorted()
+                    .collect(Collectors.toList());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return fileList;
     }
 
     public static FileTime date(Path path) {

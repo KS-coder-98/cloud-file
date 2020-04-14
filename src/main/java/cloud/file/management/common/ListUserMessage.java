@@ -15,7 +15,7 @@ public class ListUserMessage extends Message {
 
     @Override
     public void preprocess() {
-        System.out.println("receive msg with list user " + this.getList().toString());
+//        System.out.println("receive msg with list user " + this.getList().toString());
         MainViewController.setList(this.getList());
     }
 }

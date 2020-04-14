@@ -17,6 +17,11 @@ public abstract class Message implements Serializable {
         this.fileInByte = fileInByte;
     }
 
+    public Message(String login, List<String> list){
+        this.login = login;
+        this.list = list;
+    }
+
     public Message(String login) {
         this.login = login;
         this.path = null;

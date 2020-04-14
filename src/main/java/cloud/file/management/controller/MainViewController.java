@@ -4,6 +4,7 @@ import cloud.file.management.common.FileMessage;
 import cloud.file.management.model.FileAPI;
 import cloud.file.management.model.HandlerResources;
 import cloud.file.management.model.User;
+import cloud.file.management.model.communication.SendListNamesFiles;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -112,6 +113,8 @@ public class MainViewController implements Initializable {
         setLastTime();
         loadTreeItems();
         refreshDirectory.start();
+        SendListNamesFiles.send();
+
 
         Thread refreshListUser = new Thread(this::refreshUserList);
         refreshListUser.setDaemon(true);
@@ -140,11 +143,10 @@ public class MainViewController implements Initializable {
                 String relativePath = absolutePath.toString().substring(User.getPath().toString().length()+1);
                 byte[] file = FileAPI.getStreamFile(absolutePath);
                 FileMessage msg = new FileMessage(User.getLogin(), relativePath, choseUser, file);
-                User.getEchoClient().sendMessage(msg);
+                User.getEchoClient().addMessage(msg);
             }catch (NullPointerException e){
                 System.err.println("nie ustawiono pola file lub user w mainControler");
             }
-
         });
     }
 
@@ -154,7 +156,6 @@ public class MainViewController implements Initializable {
             TreeItem<String> root = HandlerResources.listDirectory(path);
             treeViewListFiles.setRoot(root);
             root.setExpanded(true);
-            System.out.println("pierwszy if");
         }catch (FileNotFoundException ex) {
             TreeItem<String> root = new TreeItem<>("INVALID PATH !!!");
             treeViewListFiles.setRoot(root);
@@ -167,6 +168,9 @@ public class MainViewController implements Initializable {
                 if ( !lastUpdate.toString().equals(HandlerResources.date(path).toString()) ){
                     setLastTime();
                     loadTreeItems();
+                    SendListNamesFiles.send();
+
+                    System.out.println("powinien odswieżyc");
                 }
             });
             try {
@@ -181,14 +185,12 @@ public class MainViewController implements Initializable {
         while (controlFlag){
             Platform.runLater(()->{
                 if (!Objects.isNull(list)){
-                    System.out.println("powinno odswiezyć "+list.toString());
                     treeViewListUser.getItems().clear();
                     for ( String nick : list ){
-                        System.out.println("dodało"+ nick);
                         treeViewListUser.getItems().add(nick);
                     }
                 }else
-                    System.out.println("kista jest nulem");
+                    System.err.println("error list is null in MainViewController refreshUserList");
             });
             try {
                 Thread.sleep(60000);

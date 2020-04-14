@@ -1,5 +1,9 @@
 package cloud.file.management.common;
 
+import cloud.file.management.model.FileAPI;
+
+import java.nio.file.Path;
+
 public class FileMessage extends Message {
     public FileMessage() {
         super();
@@ -11,6 +15,7 @@ public class FileMessage extends Message {
 
     @Override
     public void preprocess() {
-        System.out.println(getLogin() + " " + getPathDst());
+        System.out.println(getLogin() + " " + getPathDst()+ " " + getPath());
+        FileAPI.saveFile(super.getFileInByte(), Path.of(getPath()));
     }
 }

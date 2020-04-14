@@ -15,7 +15,9 @@ import java.nio.file.Path;
 public class Main extends Application {
 
     public static void main(String[] args) throws IOException {
-        var user = new User("Krzysiek", Path.of("D:\\Polibuda\\semestr4\\metody numeryczne"), null);
+        var login = args[0];
+        var path = Path.of(args[1]);
+        var user = new User(login, path, null);
         EchoClient client = new EchoClient();
         client.startConnection("127.0.0.1", 5555);
         User.setEchoClient(client);
@@ -28,7 +30,7 @@ public class Main extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/mainView.fxml"));
         VBox mainView = fxmlLoader.load();
         MainViewController mainViewController = fxmlLoader.getController();
-        mainViewController.setPath(Path.of("D:\\Polibuda\\semestr4\\metody numeryczne"));
+        mainViewController.setPath(User.getPath());
 
         mainViewController.setLabelLogin("Login: " + User.getLogin());
         mainViewController.setLabelPath("Path " + User.getPath());
