@@ -31,7 +31,6 @@ public class Send extends Thread {
                 var msg = msgList.get(0);
                 sendMessage(msg);
                 msgList.remove(0);
-                System.out.println("wyslano wiadosmc ");
             }else{
                 try {
                     Thread.sleep(6000);

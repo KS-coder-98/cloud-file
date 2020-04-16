@@ -14,6 +14,7 @@ public class RequestForFileMessage extends Message {
 
     @Override
     public void preprocess() {
+        System.out.println("preprocess requestForFileMessage");
         for (var relativePath : getList()) {
             Path absolutePath = Path.of(User.getPath() + "\\" + relativePath);
             String login = User.getLogin();

@@ -1,5 +1,7 @@
 package cloud.file.management.common;
 
+import cloud.file.management.model.UserTask;
+
 import java.util.List;
 
 public class ListLocalFileMessage extends Message{
@@ -10,6 +12,7 @@ public class ListLocalFileMessage extends Message{
 
     @Override
     public void preprocess() {
-        //nothing to do
+        System.out.println("preprocess ListLocalFileMessage");
+        UserTask.makeRequestForFile(getList(), getLogin());
     }
 }

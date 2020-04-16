@@ -7,6 +7,7 @@ public class JoinMessage extends Message {
 
     @Override
     public void preprocess() {
+        System.out.println("preprocess JoinMessage");
         //nothing to do
     }
 }

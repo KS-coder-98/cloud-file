@@ -15,6 +15,7 @@ public class FileMessage extends Message {
 
     @Override
     public void preprocess() {
+        System.out.println("preproces fileMessage");
         System.out.println(getLogin() + " " + getPathDst()+ " " + getPath());
         FileAPI.saveFile(super.getFileInByte(), Path.of(getPath()));
     }

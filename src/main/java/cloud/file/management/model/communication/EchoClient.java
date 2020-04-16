@@ -41,23 +41,13 @@ public class EchoClient {
         }
     }
 
-//    public void sendMessage(Message msg) {
-//        try {
-//            out.writeObject(msg);
-//            out.flush();
-//        } catch (IOException e) {
-//            System.out.println(e.getMessage());
-//            e.printStackTrace();
-//        }
-//    }
-
     public void stopConnection() {
         try {
             in.close();
             out.close();
             clientSocket.close();
         } catch (IOException e) {
-            System.out.println("eror with close connection");
+            System.out.println("error with close connection");
             e.printStackTrace();
         }
     }
