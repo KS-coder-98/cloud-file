@@ -4,8 +4,8 @@ package cloud.file.management.common;
 import cloud.file.management.controller.MainViewController;
 
 public class ListUserMessage extends Message {
-    public ListUserMessage(String login, String path, byte[] fileInByte) {
-        super(login, path, null, fileInByte);
+    public ListUserMessage(String login, String path, long id) {
+        super(login, path, null, id);
     }
 
     public ListUserMessage() {

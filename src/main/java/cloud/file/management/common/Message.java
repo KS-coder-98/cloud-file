@@ -7,14 +7,14 @@ public abstract class Message implements Serializable {
     private String login;
     private String path;
     private String pathDst;
-    private byte[] fileInByte;
+    private long id;
     private List<String> list;
 
-    public Message(String login, String path, String pathDst, byte[] fileInByte) {
+    public Message(String login, String path, String pathDst, long id) {
         this.login = login;
         this.path = path;
         this.pathDst = pathDst;
-        this.fileInByte = fileInByte;
+        this.id = id;
     }
 
     public Message(String login, List<String> list){
@@ -25,7 +25,7 @@ public abstract class Message implements Serializable {
     public Message(String login) {
         this.login = login;
         this.path = null;
-        this.fileInByte = null;
+//        this.fileInByte = null;
     }
 
     public Message() {
@@ -62,14 +62,6 @@ public abstract class Message implements Serializable {
 
     public void setPath(String path) {
         this.path = path;
-    }
-
-    public byte[] getFileInByte() {
-        return fileInByte;
-    }
-
-    public void setFileInByte(byte[] fileInByte) {
-        this.fileInByte = fileInByte;
     }
 
     public abstract void preprocess();

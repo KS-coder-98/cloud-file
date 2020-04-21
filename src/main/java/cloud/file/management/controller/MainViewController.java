@@ -1,6 +1,5 @@
 package cloud.file.management.controller;
 
-import cloud.file.management.common.FileMessage;
 import cloud.file.management.model.FileAPI;
 import cloud.file.management.model.HandlerResources;
 import cloud.file.management.model.User;
@@ -142,8 +141,9 @@ public class MainViewController implements Initializable {
                 Path absolutePath = Path.of(choseFile.getParent().getValue()+"\\"+choseFile.getValue());
                 String relativePath = absolutePath.toString().substring(User.getPath().toString().length()+1);
                 byte[] file = FileAPI.getStreamFile(absolutePath);
-                FileMessage msg = new FileMessage(User.getLogin(), relativePath, choseUser, file);
-                User.getEchoClient().addMessage(msg);
+                //todo na razie przycisk wyłaczony
+//                FileMessage msg = new FileMessage(User.getLogin(), relativePath, choseUser, file);
+//                User.getEchoClient().addMessage(msg);
             }catch (NullPointerException e){
                 System.err.println("nie ustawiono pola file lub user w mainControler");
             }
