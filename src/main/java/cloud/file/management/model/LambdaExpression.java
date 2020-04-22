@@ -18,4 +18,12 @@ public abstract class LambdaExpression {
             }
         }
     }
+
+    public static <T> T find(List<T> list, Predicate<T> predicate){
+        for ( T t : list ){
+            if ( predicate.test(t) )
+                return t;
+        }
+        return null;
+    }
 }

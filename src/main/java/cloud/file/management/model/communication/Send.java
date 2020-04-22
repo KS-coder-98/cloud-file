@@ -1,9 +1,12 @@
 package cloud.file.management.model.communication;
 
+import cloud.file.management.common.FileMessage;
 import cloud.file.management.common.Message;
+import cloud.file.management.model.User;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.nio.file.Path;
 import java.util.List;
 
 public class Send extends Thread {
@@ -19,6 +22,8 @@ public class Send extends Thread {
         try {
             out.writeObject(msg);
             out.flush();
+            if ( msg instanceof FileMessage)
+                User.getEchoClient().getSendFile().sendFile(Path.of(msg.getPath()), msg.getId());
         } catch (IOException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();

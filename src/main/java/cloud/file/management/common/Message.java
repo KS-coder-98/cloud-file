@@ -64,5 +64,24 @@ public abstract class Message implements Serializable {
         this.path = path;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public abstract void preprocess();
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "login='" + login + '\'' +
+                ", path='" + path + '\'' +
+                ", pathDst='" + pathDst + '\'' +
+                ", id=" + id +
+                ", list=" + list +
+                '}';
+    }
 }
