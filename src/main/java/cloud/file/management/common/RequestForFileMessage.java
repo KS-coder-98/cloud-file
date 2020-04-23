@@ -20,21 +20,17 @@ public class RequestForFileMessage extends Message {
             Path absolutePath = Path.of(User.getPath() + "\\" + relativePath);
             String login = User.getLogin();
             //todo generate id
-            System.out.println(relativePath);
+            System.out.println("|"+relativePath+"|");
             //generate id
             long id = new Random().nextLong();
-            Message msg = new FileMessage(login, relativePath, login, id);
+            //todo ustawic 2 path
+            Message msg = new FileMessage(login, relativePath, absolutePath.toString(), id);
             System.out.println(msg.toString());
             User.getEchoClient().addMessage(msg);
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             //todo send file
             if (Objects.isNull(User.getEchoClient().getSendFile()))
                 System.out.println("sciezka jest nulem");
-            User.getEchoClient().getSendFile().sendFile(absolutePath, id);
+//            User.getEchoClient().getSendFile().sendFile(Path.of( relativePath), id);
             System.out.println("odpali send file z "+absolutePath+ " "+id);
             System.err.println(User.getEchoClient().getMsgList().toString());
         }

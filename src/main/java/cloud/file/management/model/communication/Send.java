@@ -22,9 +22,13 @@ public class Send extends Thread {
         try {
             out.writeObject(msg);
             out.flush();
-            if ( msg instanceof FileMessage)
+            if ( msg instanceof FileMessage){
+                Thread.sleep(1000);
                 User.getEchoClient().getSendFile().sendFile(Path.of(msg.getPath()), msg.getId());
-        } catch (IOException e) {
+                System.err.println("wyslano file message");
+
+            }
+        } catch (IOException | InterruptedException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
@@ -35,6 +39,8 @@ public class Send extends Thread {
             if ( !msgList.isEmpty() ){
                 var msg = msgList.get(0);
                 sendMessage(msg);
+                if ( msg instanceof FileMessage )
+                    System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                 msgList.remove(0);
             }else{
                 try {
