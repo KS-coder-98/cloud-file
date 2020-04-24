@@ -12,56 +12,45 @@ import java.nio.file.Path;
 public class SendFile {
     private OutputStream out;
 
-    public SendFile(OutputStream out){
+    public SendFile(OutputStream out) {
         this.out = out;
     }
 
-    public void sendFile(Path path, long id){
-        try{
+    public void sendFile(Path path, long id) {
+        try {
             //send id
+            System.out.println("start wysyłania id: " + id);
             byte[] idBytes = Convert.longToBytes(id);
             out.write(idBytes);
 
-//            File file = new File(pathStr);
-
-            FileChannel fileChannel = FileChannel.open(Path.of( User.getPath()+"\\"+ path));
-
-            System.out.println("wyslalo id wysyla rozmiar");
             //send size
+            FileChannel fileChannel = FileChannel.open(Path.of(User.getPath() + "\\" + path));
             long size = fileChannel.size();
+
             byte[] sizeFile = Convert.longToBytes(size);
             out.write(sizeFile);
-            System.out.println("rozmiar pliku: "+size);
-            //buffer
-            byte[] buffer = new byte[1024];
 
-            //send file
-            System.out.println("zaczelo wyslyac plik: "+path);
 
-            //         Allocate a ByteBuffer
-            int count;
-            long sizeBuffer = 1024;
-            if ( size < 1024 ){
-                sizeBuffer = size;
-            }
-            ByteBuffer buffer1 = ByteBuffer.allocate((int)sizeBuffer);
+            //   Allocate a ByteBuffer
+            long defaultSizeBuffer = 1024;
+            long sizeBuffer = Math.min(size, defaultSizeBuffer);
+            ByteBuffer buffer = ByteBuffer.allocate((Math.toIntExact(sizeBuffer)));
 
-            int sendBytes=0;
-            while(  (count=fileChannel.read(buffer1) ) > 0) {
-
-                buffer1.flip();
-                out.write(buffer1.array());
-                buffer1.clear();
-                sendBytes+=count;
-                if ( (size - sendBytes) < 1024 ){
-                    buffer1 = ByteBuffer.allocate((int)size - sendBytes);
+            long sendBytes = 0, count;
+            while ((count = fileChannel.read(buffer)) > 0) {
+                buffer.flip();
+                out.write(buffer.array());
+                buffer.clear();
+                sendBytes += count;
+                System.out.println("send Byte" + sendBytes);
+                if ((size - sendBytes) < defaultSizeBuffer) {
+                    buffer = ByteBuffer.allocate(Math.toIntExact(size - sendBytes));
                 }
             }
-
-            System.out.println("wysłana plik sendFile rozmiar wysłany: "+sendBytes);
+            System.out.println("koniec wysyłania id: " + id);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
+
 }

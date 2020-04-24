@@ -1,32 +1,30 @@
 package cloud.file.management.model;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 public abstract class FileAPI {
 
-    public static byte[] getStreamFile(Path path) {
-        try (FileInputStream fileInputStream = new FileInputStream(String.valueOf(path))) {
-            return fileInputStream.readAllBytes();
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("error in file fileApi !!!!!!!!!!!!!!!!!!!");
-            return null;
-        }
-    }
+//    public static byte[] getStreamFile(Path path) {
+//        try (FileInputStream fileInputStream = new FileInputStream(String.valueOf(path))) {
+//            return fileInputStream.readAllBytes();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            System.out.println("error in file fileApi !!!!!!!!!!!!!!!!!!!");
+//            return null;
+//        }
+//    }
 
-    public static void saveFile(byte[] file, Path path) {
-        //todo save file in disk
-        var pathDst = createFoldersFromPath(path, "");
-        try (FileOutputStream fileOutputStream = new FileOutputStream(pathDst)) {
-            fileOutputStream.write(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    public static void saveFile(byte[] file, Path path) {
+//        //todo save file in disk
+//        var pathDst = createFoldersFromPath(path, "");
+//        try (FileOutputStream fileOutputStream = new FileOutputStream(pathDst)) {
+//            fileOutputStream.write(file);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     public static String createFoldersFromPath(Path path, String dst) {
         String[] splitPath = path.toString().split("\\\\");

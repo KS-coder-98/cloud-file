@@ -1,6 +1,6 @@
 package cloud.file.management.controller;
 
-import cloud.file.management.model.FileAPI;
+import cloud.file.management.common.FileMessage;
 import cloud.file.management.model.HandlerResources;
 import cloud.file.management.model.User;
 import cloud.file.management.model.communication.SendListNamesFiles;
@@ -15,6 +15,7 @@ import java.nio.file.Path;
 import java.nio.file.attribute.FileTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 public class MainViewController implements Initializable {
@@ -140,10 +141,9 @@ public class MainViewController implements Initializable {
                 Objects.requireNonNull(choseUser);
                 Path absolutePath = Path.of(choseFile.getParent().getValue()+"\\"+choseFile.getValue());
                 String relativePath = absolutePath.toString().substring(User.getPath().toString().length()+1);
-                byte[] file = FileAPI.getStreamFile(absolutePath);
                 //todo na razie przycisk wyłaczony
-//                FileMessage msg = new FileMessage(User.getLogin(), relativePath, choseUser, file);
-//                User.getEchoClient().addMessage(msg);
+                FileMessage msg = new FileMessage(User.getLogin(), relativePath, choseUser, new Random().nextLong());
+                User.getEchoClient().getSend().sendMessage(msg);
             }catch (NullPointerException e){
                 System.err.println("nie ustawiono pola file lub user w mainControler");
             }

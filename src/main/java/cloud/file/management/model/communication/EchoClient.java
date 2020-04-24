@@ -19,12 +19,16 @@ public class EchoClient {
     private ObjectOutputStream out;
     private ObjectInputStream in;
     private SendFile sendFile;
+    private ReceiveFile receiveFile;
+    private Send send;
     private List<Message> msgList;
+    private List<Message> msgListReceive;
 
     private OutputStream outFile;
 
     public void startConnection(String ip, int port) {
         msgList = Collections.synchronizedList(new ArrayList<>());
+        msgListReceive = Collections.synchronizedList(new ArrayList<>());
         try {
             clientSocket = new Socket(ip, port);
             clientSocketFile = new Socket(ip, port+1);
@@ -33,9 +37,9 @@ public class EchoClient {
         }
         try {
             out = new ObjectOutputStream(clientSocket.getOutputStream());
-            System.out.println(User.getLogin());
             msgList.add(new JoinMessage(User.getLogin()));
-            new Send(out, msgList).start();
+            send = new Send(out, msgList);
+            send.start();
 
             outFile = clientSocketFile.getOutputStream();
             sendFile = new SendFile(outFile);
@@ -44,7 +48,9 @@ public class EchoClient {
         }
         try {
             in = new ObjectInputStream(clientSocket.getInputStream());
+            receiveFile = new ReceiveFile(clientSocketFile.getInputStream(), msgListReceive);
             new Receive(in).start();
+            receiveFile.start();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -119,5 +125,29 @@ public class EchoClient {
 
     public void setSendFile(SendFile sendFile) {
         this.sendFile = sendFile;
+    }
+
+    public ReceiveFile getReceiveFile() {
+        return receiveFile;
+    }
+
+    public void setReceiveFile(ReceiveFile receiveFile) {
+        this.receiveFile = receiveFile;
+    }
+
+    public List<Message> getMsgListReceive() {
+        return msgListReceive;
+    }
+
+    public void setMsgListReceive(List<Message> msgListReceive) {
+        this.msgListReceive = msgListReceive;
+    }
+
+    public Send getSend() {
+        return send;
+    }
+
+    public void setSend(Send send) {
+        this.send = send;
     }
 }

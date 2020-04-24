@@ -1,5 +1,7 @@
 package cloud.file.management.common;
 
+import cloud.file.management.model.User;
+
 public class FileMessage extends Message {
     public FileMessage() {
         super();
@@ -12,8 +14,9 @@ public class FileMessage extends Message {
     @Override
     public void preprocess() {
         System.out.println("preproces fileMessage");
-        System.out.println(getLogin() + " " + getPathDst()+ " " + getPath());
+        System.out.println(getLogin() + " " + getPathDst()+ " " + getPath()+" ###################################");
         //todo save file
-//        FileAPI.saveFile(super.getFileInByte(), Path.of(getPath()));
+        User.getEchoClient().getMsgListReceive().add(this);
+
     }
 }
