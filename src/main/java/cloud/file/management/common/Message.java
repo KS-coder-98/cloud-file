@@ -17,7 +17,7 @@ public abstract class Message implements Serializable {
         this.id = id;
     }
 
-    public Message(String login, List<String> list){
+    public Message(String login, List<String> list) {
         this.login = login;
         this.list = list;
     }

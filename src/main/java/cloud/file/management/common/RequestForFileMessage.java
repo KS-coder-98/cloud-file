@@ -2,7 +2,6 @@ package cloud.file.management.common;
 
 import cloud.file.management.model.User;
 
-import java.nio.file.Path;
 import java.util.List;
 import java.util.Random;
 
@@ -15,7 +14,7 @@ public class RequestForFileMessage extends Message {
     public void preprocess() {
         System.out.println("preprocess requestForFileMessage "+ getList());
         for (var relativePath : getList()) {
-            Path absolutePath = Path.of(User.getPath() + "\\" + relativePath);
+//            Path absolutePath = Path.of(User.getPath() + "\\" + relativePath);
 
             System.out.println("sciezka wzgledna: " +relativePath);
             //generate id
@@ -23,7 +22,6 @@ public class RequestForFileMessage extends Message {
             Message msg = new FileMessage(User.getLogin(), relativePath, getLogin(), id);
             System.out.println(msg.toString());
             User.getEchoClient().addMessage(msg);
-//            System.err.println(User.getEchoClient().getMsgList().toString());
         }
     }
 }

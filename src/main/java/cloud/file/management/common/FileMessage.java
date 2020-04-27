@@ -14,7 +14,7 @@ public class FileMessage extends Message {
     @Override
     public void preprocess() {
         System.out.println("preproces fileMessage");
-        System.out.println(getLogin() + " " + getPathDst()+ " " + getPath()+" ###################################");
+        System.out.println(getLogin() + " " + getPathDst() + " " + getPath() + " ###################################");
         //todo save file
         User.getEchoClient().getMsgListReceive().add(this);
 

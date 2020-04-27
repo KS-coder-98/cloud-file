@@ -8,11 +8,11 @@ public class User {
     private static String login;
     private static Path path;
     private static EchoClient echoClient;
+    private static String eventName;
 
     public static String getLogin() {
         return login;
     }
-
 
     public static Path getPath() {
         return path;
@@ -30,5 +30,13 @@ public class User {
         User.login = login;
         User.path = path;
         User.echoClient = echoClient;
+    }
+
+    public static String getEventName() {
+        return eventName;
+    }
+
+    public static void setEventName(String eventName) {
+        User.eventName = eventName;
     }
 }

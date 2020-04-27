@@ -9,13 +9,29 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Path;
 
+/**
+ * Class implements sending file. This class is based on OutputStream.
+ */
 public class SendFile {
     private OutputStream out;
 
+    /**
+     * Create object with bind specified OutputStream
+     *
+     * @param out stream is responsible for sending file
+     */
     public SendFile(OutputStream out) {
         this.out = out;
     }
 
+    /**
+     * Function sends file to client.
+     * First send 8 bytes are assigned to id. Next send 8 bytes is size file. After that send all file data. For reading
+     * file's bytes is used FileChanel class
+     *
+     * @param path path where is located file to send
+     * @param id id file is added to recognize file
+     */
     public void sendFile(Path path, long id) {
         try {
             //send id
@@ -37,17 +53,16 @@ public class SendFile {
             ByteBuffer buffer = ByteBuffer.allocate((Math.toIntExact(sizeBuffer)));
 
             long sendBytes = 0, count;
+            User.setEventName("send file: "+path);
             while ((count = fileChannel.read(buffer)) > 0) {
                 buffer.flip();
                 out.write(buffer.array());
                 buffer.clear();
                 sendBytes += count;
-                System.out.println("send Byte" + sendBytes);
                 if ((size - sendBytes) < defaultSizeBuffer) {
                     buffer = ByteBuffer.allocate(Math.toIntExact(size - sendBytes));
                 }
             }
-            System.out.println("koniec wysyłania id: " + id);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -4,9 +4,9 @@ import cloud.file.management.model.UserTask;
 
 import java.util.List;
 
-public class ListLocalFileMessage extends Message{
+public class ListLocalFileMessage extends Message {
 
-    public ListLocalFileMessage(String login, List<String> list){
+    public ListLocalFileMessage(String login, List<String> list) {
         super(login, list);
     }
 

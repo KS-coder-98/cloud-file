@@ -23,7 +23,7 @@ public class MainViewController implements Initializable {
     private static Boolean controlFlag = true;
     private static FileTime lastUpdate;
     private static TreeItem<String> choseFile;
-    private  static String choseUser;
+    private static String choseUser;
     private static List<String> list;
     private Path path;
 
@@ -93,6 +93,10 @@ public class MainViewController implements Initializable {
         labelVersion.setText(s);
     }
 
+    public void setLabelLog(String s){
+        labelLog.setText(s);
+    }
+
     public void setLabelStatusConnection(String s) {
         labelStatusConnection.setText(s);
     }
@@ -120,17 +124,21 @@ public class MainViewController implements Initializable {
         refreshListUser.setDaemon(true);
         refreshListUser.start();
 
+        Thread refreshLabelLog = new Thread(this::refreshStatusLog);
+        refreshLabelLog.setDaemon(true);
+        refreshLabelLog.start();
+
 
         treeViewListUser.getSelectionModel()
                 .selectedItemProperty()
-                .addListener((observable, oldValue, newValue) ->{
-                        setLabelWhereFileSend(newValue);
-                        choseUser = newValue;
+                .addListener((observable, oldValue, newValue) -> {
+                    setLabelWhereFileSend(newValue);
+                    choseUser = newValue;
                 });
 
         treeViewListFiles.getSelectionModel()
                 .selectedItemProperty()
-                .addListener((observable, oldValue, newValue) ->{
+                .addListener((observable, oldValue, newValue) -> {
                     choseFile = newValue;
                     setLabelWhatFileSend(newValue.getValue());
                 });
@@ -139,33 +147,33 @@ public class MainViewController implements Initializable {
             try {
                 Objects.requireNonNull(choseFile);
                 Objects.requireNonNull(choseUser);
-                Path absolutePath = Path.of(choseFile.getParent().getValue()+"\\"+choseFile.getValue());
-                String relativePath = absolutePath.toString().substring(User.getPath().toString().length()+1);
+                Path absolutePath = Path.of(choseFile.getParent().getValue() + "\\" + choseFile.getValue());
+                String relativePath = absolutePath.toString().substring(User.getPath().toString().length() + 1);
                 //todo na razie przycisk wyłaczony
                 FileMessage msg = new FileMessage(User.getLogin(), relativePath, choseUser, new Random().nextLong());
                 User.getEchoClient().getSend().sendMessage(msg);
-            }catch (NullPointerException e){
+            } catch (NullPointerException e) {
                 System.err.println("nie ustawiono pola file lub user w mainControler");
             }
         });
     }
 
     // loads some strings into the tree in the application UI.
-    public void loadTreeItems(){
-        try{
+    public void loadTreeItems() {
+        try {
             TreeItem<String> root = HandlerResources.listDirectory(path);
             treeViewListFiles.setRoot(root);
             root.setExpanded(true);
-        }catch (FileNotFoundException ex) {
+        } catch (FileNotFoundException ex) {
             TreeItem<String> root = new TreeItem<>("INVALID PATH !!!");
             treeViewListFiles.setRoot(root);
         }
     }
 
-    private void refreshTreeViewDirectory(){
-        while (controlFlag){
-            Platform.runLater(()->{
-                if ( !lastUpdate.toString().equals(HandlerResources.date(path).toString()) ){
+    private void refreshTreeViewDirectory() {
+        while (controlFlag) {
+            Platform.runLater(() -> {
+                if (!lastUpdate.toString().equals(HandlerResources.date(path).toString())) {
                     setLastTime();
                     loadTreeItems();
                     SendListNamesFiles.send();
@@ -175,26 +183,26 @@ public class MainViewController implements Initializable {
             });
             try {
                 Thread.sleep(60000);
-            }catch (InterruptedException e) {
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    private void refreshUserList(){
-        while (controlFlag){
-            Platform.runLater(()->{
-                if (!Objects.isNull(list)){
+    private void refreshUserList() {
+        while (controlFlag) {
+            Platform.runLater(() -> {
+                if (!Objects.isNull(list)) {
                     treeViewListUser.getItems().clear();
-                    for ( String nick : list ){
+                    for (String nick : list) {
                         treeViewListUser.getItems().add(nick);
                     }
-                }else
+                } else
                     System.err.println("error list is null in MainViewController refreshUserList");
             });
             try {
                 Thread.sleep(60000);
-            }catch (InterruptedException e) {
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
@@ -210,5 +218,16 @@ public class MainViewController implements Initializable {
         return null;
     }
 
-
+    private void refreshStatusLog(){
+        while (controlFlag){
+            Platform.runLater(()->{
+                setLabelLog(User.getEventName());
+            });
+            try {
+                Thread.sleep(500);
+            }catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
