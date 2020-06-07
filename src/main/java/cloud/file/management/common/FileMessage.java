@@ -17,6 +17,5 @@ public class FileMessage extends Message {
         System.out.println(getLogin() + " " + getPathDst() + " " + getPath() + " ###################################");
         //todo save file
         User.getEchoClient().getMsgListReceive().add(this);
-
     }
 }

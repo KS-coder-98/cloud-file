@@ -49,7 +49,7 @@ public abstract class HandlerResources {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return fileList;
+        return new ArrayList<String>(fileList);
     }
 
     public static FileTime date(Path path) {

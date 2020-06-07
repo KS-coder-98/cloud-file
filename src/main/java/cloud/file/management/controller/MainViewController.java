@@ -1,7 +1,10 @@
 package cloud.file.management.controller;
 
+import cloud.file.management.common.DeleteFiles;
 import cloud.file.management.common.FileMessage;
+import cloud.file.management.common.Message;
 import cloud.file.management.model.HandlerResources;
+import cloud.file.management.model.LambdaExpression;
 import cloud.file.management.model.User;
 import cloud.file.management.model.communication.SendListNamesFiles;
 import javafx.application.Platform;
@@ -13,10 +16,7 @@ import java.io.FileNotFoundException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.attribute.FileTime;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class MainViewController implements Initializable {
 
@@ -25,6 +25,8 @@ public class MainViewController implements Initializable {
     private static TreeItem<String> choseFile;
     private static String choseUser;
     private static List<String> list;
+    private static List<String> filesList;
+
     private Path path;
 
     public static List<String> getList() {
@@ -119,6 +121,8 @@ public class MainViewController implements Initializable {
         refreshDirectory.start();
         SendListNamesFiles.send();
 
+        filesList = HandlerResources.listNameFile(User.getPath());
+
 
         Thread refreshListUser = new Thread(this::refreshUserList);
         refreshListUser.setDaemon(true);
@@ -173,16 +177,28 @@ public class MainViewController implements Initializable {
     private void refreshTreeViewDirectory() {
         while (controlFlag) {
             Platform.runLater(() -> {
-                if (!lastUpdate.toString().equals(HandlerResources.date(path).toString())) {
+
+                Collections.sort(filesList);
+                List<String> tempListFile = HandlerResources.listNameFile(User.getPath());
+                Collections.sort(tempListFile);
+                LambdaExpression.consumer(tempListFile, System.err::println);
+                filesList.removeAll(tempListFile);
+                if (filesList.size()>0){
+                    LambdaExpression.consumer(filesList, System.err::println);
+                    Message msg = new DeleteFiles(User.getLogin(), filesList);
+                    User.getEchoClient().addMessage(msg);
+                }
+                else if (!lastUpdate.toString().equals(HandlerResources.date(path).toString())) {
                     setLastTime();
                     loadTreeItems();
                     SendListNamesFiles.send();
-
                     System.out.println("powinien odswieżyc");
                 }
+                filesList = HandlerResources.listNameFile(User.getPath());
+
             });
             try {
-                Thread.sleep(60000);
+                Thread.sleep(20000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
